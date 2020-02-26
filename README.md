@@ -56,4 +56,4 @@ R lecture: 서울대병원 진단검사의학과
 
 
 
-개인 PC에서 실습을 원한다면 http://www.r-project.org 와 https://rstudio.com/products/rstudio/download/#download 에서 **[R](https://www.r-project.org/)**과 **[RStudio](https://rstudio.com/)** 를 설치하자.
+개인 PC에서 실습을 원한다면 http://www.r-project.org 와 https://rstudio.com/products/rstudio/download/#download 에서 **[R](https://www.r-project.org/)** 과 **[RStudio](https://rstudio.com/)** 를 설치하자.
