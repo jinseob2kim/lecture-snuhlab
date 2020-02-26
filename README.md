@@ -41,7 +41,7 @@ R lecture: 서울대병원 진단검사의학과
 
 ## 준비사항 
 
-실습은 클라우드 환경인 RStudio cloud 를 이용하여 진행한다. 회원가입 후, 아래를 따라 강의자료가 포함된 실습환경을 생성하자.
+실습은 클라우드 환경인 [RStudio cloud](https://rstudio.cloud) 를 이용하여 진행한다. 회원가입 후, 아래를 따라 강의자료가 포함된 실습환경을 생성하자.
 
 
 > 1. https://rstudio.cloud 회원 가입
