@@ -51,9 +51,9 @@ R lecture: 서울대병원 진단검사의학과
 > 3. 위쪽 __*"Projects"*__ 클릭 후, __*"New Project"*__ 를 눌러 __*"New Project from Git Repo"*__ 를 선택 후, Repo 주소 **https://github.com/jinseob2kim/lecture-snuhlab** 입력.
 
 
-<center>
+
 ![Project 생성](rstudiocloud2.png)
-</center>
+
 
 
 개인 PC에서 실습을 원한다면 http://www.r-project.org 와 https://rstudio.com/products/rstudio/download/#download 에서 **[R](https://www.r-project.org/)**과 **[RStudio](https://rstudio.com/)** 를 설치하자.
