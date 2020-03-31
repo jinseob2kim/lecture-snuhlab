@@ -31,12 +31,12 @@ R lecture: 서울대병원 진단검사의학과
 
 |회차| 일시  | 주제  |
 |---|---|---|
-|1| 3월 18일(수) 11-13시  | R 데이터 매니지먼트 [기초](https://blog.zarathu.com/posts/2020-02-16-rdatamanagement-basic)  |
-|2|  4월 2일(목) 11-13시 |  R 데이터 매니지먼트 최근: [tidyverse](https://blog.zarathu.com/posts/2019-01-03-rdatamanagement/) |
-|3|  4월 16일(목) 11-13시 | R 데이터 시각화: [ggplot2](https://evamaerey.github.io/ggplot_flipbook/ggplot_flipbook_xaringan.html)  |
-|4|  4월 28일(목) 11-13시 | [의학연구에서의 기술통계](https://blog.zarathu.com/posts/2018-11-24-basic-biostatistics/)  |
-|5|  5월 14일(목) 11-13시 | 회귀분석, 생존분석  |
-|6|  5월 29일(목) 11-13시 | R로 논문쓰기: [rmarkdown](https://blog.zarathu.com/posts/2019-01-03-rmarkdown/) |
+|1| 4월 2일(목) 11-13시  | R 데이터 매니지먼트 [기초](https://blog.zarathu.com/posts/2020-02-16-rdatamanagement-basic)  |
+|2|  4월 14일(화) 11-13시 |  R 데이터 매니지먼트 최근: [tidyverse](https://blog.zarathu.com/posts/2019-01-03-rdatamanagement/) |
+|3|  4월 28일(화) 11-13시 | R 데이터 시각화: [ggplot2](https://evamaerey.github.io/ggplot_flipbook/ggplot_flipbook_xaringan.html)  |
+|4|  5월 12일(화) 11-13시 | [의학연구에서의 기술통계](https://blog.zarathu.com/posts/2018-11-24-basic-biostatistics/)  |
+|5|  5월 26일(화) 11-13시 | 회귀분석, 생존분석  |
+|6|  6월 9일(화) 11-13시 | R로 논문쓰기: [rmarkdown](https://blog.zarathu.com/posts/2019-01-03-rmarkdown/) |
 
 
 ## 준비사항 
