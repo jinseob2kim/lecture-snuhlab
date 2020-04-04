@@ -1,0 +1,114 @@
+---
+title: "R 데이터 매니지먼트: tidyverse"
+author: 김진섭; [`r anicon::faa('github', animate='float', rtext='jinseob2kim')`](https://github.com/jinseob2kim)
+institute: "차라투(주)"
+date: "2020-04-14"
+output:
+  xaringan::moon_reader:
+    css: ["css/footer-header.css", "default"]
+    lib_dir: libs
+    nature:
+      beforeInit: "js/macros.js"
+      slideNumberFormat: |
+        <div class="progress-bar-container">
+          <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
+          </div>
+        </div>
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: "4:3" 
+subtitle: "서울대병원 진단검사의학과"
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(echo = FALSE, fig.align = "center")
+library(knitr);library(DT);library(shiny)
+```
+
+
+layout: true
+
+<div class="my-footer"><span><a href="https://www.zarathu.com">Zarathu Co.,Ltd</a>   
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+<a href="https://github.com/jinseob2kim">김진섭</a></span></div> 
+
+
+---
+
+# Executive Summary 
+
+.large[
+
+[tidyverse](https://www.tidyverse.org/)는 직관적인 코드를 장점으로 원래의 R 문법을 빠르게 대체하고 있다.
+
+
+* [readr](https://readr.tidyverse.org/) 패키지의 `read_csv` 로 데이터를 빠르게 읽은 후
+
+
+* [magrittr](https://magrittr.tidyverse.org/) 패키지의 `%>%` 연산자로 의식의 흐름대로 코딩한다.
+
+
+* [dplyr](https://dplyr.tidyverse.org/) 패키지의 `select`, `mutate`, `filter`, `group_by`, `summarize` 함수는 `%>%` 와 찰떡궁합이다.
+
+]
+
+
+---
+
+class: center, middle
+
+## 강의록은 https://blog.zarathu.com/posts/2019-01-03-rdatamanagement/ 
+
+
+---
+
+class: center, middle
+
+# [readr](https://readr.tidyverse.org/): `read_csv`
+
+
+---
+
+class: center, middle
+
+# [magrittr](https://magrittr.tidyverse.org/): `%>%`
+
+
+---
+
+class: center, middle
+
+# [dplyr](https://dplyr.tidyverse.org/)
+
+
+
+
+---
+
+# Executive Summary 
+
+.large[
+
+[tidyverse](https://www.tidyverse.org/)는 직관적인 코드를 장점으로 원래의 R 문법을 빠르게 대체하고 있다.
+
+
+* [readr](https://readr.tidyverse.org/) 패키지의 `read_csv` 로 데이터를 빠르게 읽은 후
+
+
+* [magrittr](https://magrittr.tidyverse.org/) 패키지의 `%>%` 연산자로 의식의 흐름대로 코딩한다.
+
+
+* [dplyr](https://dplyr.tidyverse.org/) 패키지의 `select`, `mutate`, `filter`, `group_by`, `summarize` 함수는 `%>%` 와 찰떡궁합이다.
+
+]
+
+---
+
+class: center, middle
+
+# END
+
+
