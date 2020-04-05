@@ -23,7 +23,7 @@ subtitle: "서울대병원 진단검사의학과"
 
 ```{r setup, include=FALSE}
 options(htmltools.dir.version = FALSE)
-knitr::opts_chunk$set(echo = T, fig.align = "center")
+knitr::opts_chunk$set(echo = T, fig.align = "center", warning = F, message = F)
 library(knitr);library(DT);library(rmarkdown)
 ```
 
@@ -35,6 +35,34 @@ layout: true
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
 <a href="https://github.com/jinseob2kim">김진섭</a></span></div> 
 
+
+---
+
+# 일정 
+
+|회차| 일시  | 주제  |
+|---|---|---|
+|1| 4월 2일(목) 11-13시  | R 데이터 매니지먼트 [기초](https://blog.zarathu.com/posts/2020-02-16-rdatamanagement-basic)  |
+|**2**|  **4월 14일(화) 11-13시** |  **R 데이터 매니지먼트 최근: [tidyverse](https://jinseob2kim.github.io/lecture-snuhlab/tidyverse)** |
+|3|  4월 28일(화) 11-13시 | R 데이터 시각화: [ggplot2](https://evamaerey.github.io/ggplot_flipbook/ggplot_flipbook_xaringan.html)  |
+|4|  5월 12일(화) 11-13시 | [의학연구에서의 기술통계](https://blog.zarathu.com/posts/2018-11-24-basic-biostatistics/)  |
+|5|  5월 26일(화) 11-13시 | 회귀분석, 생존분석  |
+|6|  6월 9일(화) 11-13시 | R로 논문쓰기: [rmarkdown](https://blog.zarathu.com/posts/2019-01-03-rmarkdown/) |
+
+---
+
+# 준비사항 
+
+실습은 [RStudio cloud](https://rstudio.cloud) 를 이용한다. 회원가입 후, 아래를 따라 강의자료가 포함된 실습환경을 생성하자.
+
+
+> 1. https://rstudio.cloud 회원 가입
+
+> 2. https://rstudio.cloud/spaces/53975/join?access_code=kuFNlbt%2FbSj6DH%2FuppMdXzvU4e1EPrQNgNsFAQBf 들어가서 __*"Join Space"*__ 클릭
+
+> 3. 위쪽 __*"Projects"*__ 클릭 후, __*"New Project"*__ 를 눌러 __*"New Project from Git Repo"*__ 를 선택 후, Repo 주소 **https://github.com/jinseob2kim/lecture-snuhlab** 입력.
+
+![Project 생성](https://raw.githubusercontent.com/jinseob2kim/lecture-snuhlab/master/rstudiocloud2.png)
 
 ---
 
@@ -80,6 +108,7 @@ class: center, middle
 
 ```{r, eval=F}
 a <- read.csv("https://raw.githubusercontent.com/jinseob2kim/jinseob2kim.github.io/master/smc_example.csv")
+library(magrittr)
 a %>% head
 ```
 
@@ -263,12 +292,435 @@ a %>% subset(Sex == "M") %>%
 오늘 강의에서 **`%>%` 만 익숙해지면 성공**
 ]
 
+
+---
+
+# 실습 3
+
+.large[
+**50세 이상**만 뽑아서, **성별과 흡연력** 에 따른 **모든 변수**들의 **평균, 표준편차**를 구하라. (`aggregate`)
+]
+
+--
+
+```{r, eval=F}
+b <- subset(a, Age >= 50) 
+aggregate(. ~ Sex + Smoking, data = b, 
+          FUN = function(x){c(mean = mean(x), sd = sd(x))})
+```
+
+`aggregate` 는 범주형 변수 알아서 제외해줌.
+
+--
+
+`%>%` : 중간결과물인 **b** 필요없음
+
+```{r, eval=F}
+a %>% 
+  subset(Age >= 50) %>%
+  aggregate(. ~ Sex + Smoking, data = ., 
+            FUN = function(x){c(mean = mean(x), sd = sd(x))})
+```
+
+---
+
+# 실습 3: 결과 저장
+
+결과를 **out** 에 저장 
+
+```{r, eval=F}
+*out <- a %>% 
+  subset(Age >= 50) %>%
+  aggregate(. ~ Sex + Smoking, data = ., 
+            FUN = function(x){c(mean = mean(x), sd = sd(x))})
+```
+
+--
+
+`->` 도 가능하지만 권장안함.
+
+```{r, eval=F}
+a %>% 
+  subset(Age >= 50) %>%
+  aggregate(. ~ Sex + Smoking, data = ., 
+*            FUN = function(x){c(mean = mean(x), sd = sd(x))}) -> out
+```
+
+
+
 ---
 
 class: center, middle
 
 # [dplyr](https://dplyr.tidyverse.org/)
 
+
+---
+
+# 데이터 다루는 함수들 모음
+
+.large[
+- 기본 R 함수보다 깔끔
+]
+
+
+```{r, eval=F}
+library(dplyr)                                  ## 따로 magrittr 불러올 필요 없음.
+a %>% 
+*  filter(Age >= 50) %>%
+*  select(-Patient_ID, -STRESS_EXIST) %>%       ## 범주형 변수 제외
+*  group_by(Sex, Smoking) %>% 
+*  summarize_all(list(mean = mean, sd = sd))
+```
+
+```{r, echo=F}
+library(dplyr)                                  ## 따로 magrittr 불러올 필요 없음.
+a %>% 
+  filter(Age >= 50) %>%
+  select(-Patient_ID, -STRESS_EXIST) %>%       ## 범주형 변수 제외
+  group_by(Sex, Smoking) %>% 
+  summarize_all(list(mean = mean, sd = sd)) %>% paged_table()
+```
+
+
+---
+# `filter`: `subset` 과 비슷
+
+.large[
+`subset` 과 거의 동일
+]
+
+
+```{r, eval=F}
+subset(a, Sex == "M")
+a %>% subset(Sex == "M")
+*filter(a, Sex == "M")
+*a %>% filter(Sex == "M")
+```
+
+```{r, echo=F}
+a %>% filter(Sex == "M") %>% paged_table
+```
+
+
+---
+
+# 여러 조건일 때 편함
+
+.large[
+- `&` 대신 `,` 가능 
+- `between`: 범위 설정
+]
+
+```{r, eval=F}
+a %>% subset(Age >= 50 & Age <= 60)
+*a %>% filter(Age >= 50, Age <= 60)   # ,
+*a %>% filter(between(Age, 50, 60))   # between 50 and 60
+```
+
+```{r, echo=F}
+a %>% filter(between(Age, 50, 60))  %>% paged_table # between 50 and 60
+```
+
+---
+
+# `arrange`: 정렬
+
+.large[
+- `order` 는 순서만 보여줌. `arrage` 는 바로 정렬까지.
+]
+
+
+```{r, eval=F}
+a[order(a$Age), ]
+a %>% .[order(.$Age), ]
+*a %>% arrange(Age)
+*a %>% arrange_("Age")    ## 문자로 넣을 때
+```
+
+```{r, echo=F}
+a %>% arrange(Age) %>% paged_table
+```
+
+
+---
+# `desc` 내림차순
+
+
+```{r, eval=F}
+a[order(a$Age, -a$BMI), ]
+a %>% .[order(.$Age, -.$BMI), ]
+*a %>% arrange(Age, desc(BMI))
+```
+
+```{r, echo=F}
+a %>% arrange(Age, desc(BMI)) %>% paged_table
+```
+
+
+---
+
+# `select`: 변수 선택
+
+
+```{r, eval=F}
+a[, c("Sex", "Age", "Height")]
+a %>% .[, c("Sex", "Age", "Height")]
+*a %>% select(Sex, Age, Height)
+*a %>% select_("Sex", "Age", "Height")
+```
+
+```{r, echo=F}
+a %>% select(Sex, Age, Height) %>% paged_table
+```
+
+---
+
+# 여러 표현방법
+
+```{r, eval=F}
+a %>% select(Sex:Height)          ## Sex 부터 Height 사이의 모든 변수
+a %>% select("Sex":"Height")
+a %>% select(2, 3, 4)
+a %>% select(c(2, 3, 4))
+a %>% select(2:4)
+```
+
+
+---
+
+# 특정 변수 제외 
+
+```{r, eval=F}
+a[, -c("Sex", "Age", "Height")]
+a %>% .[, -c("Sex", "Age", "Height")]
+*a %>% select(-Sex, -Age, -Height)
+```
+
+```{r, echo=F}
+a %>% select(-Sex, -Age, -Height) %>% paged_table
+```
+
+
+---
+
+# 여러 표현방법
+
+```{r, eval=F}
+a %>% select(-2, -3, -4)
+a %>% select(-(2:4))
+a %>% select(-c(2, 3, 4))
+
+a %>% select(-(Sex:Height))
+a %>% select(-"Sex", -"Age", -"Height")
+a %>% select(-("Sex":"Height"))
+```
+
+---
+
+# 특정 조건 
+
+.large[
+**_date** 로 끝나는 변수들만 고르고 싶다면?
+]
+
+```{r, eval=F}
+a[, grep("_date", names(a))]          ## "_date" 포함
+a %>% .[, grep("_date", names(.))]
+*a %>% select(ends_with("date"))      ## "_date" 로 끝남
+```
+
+```{r, echo=F}
+a %>% select(ends_with("date")) %>% paged_table
+```
+
+
+
+---
+
+# `select` 와 함께하는 함수들 
+
+.large[
+`start_with("abc")`: "abc"로 시작하는 이름
+
+`end_with("xyz")`: "xyz"로 끝나는 이름
+
+`contains("ijk")`: "ijk"를 포함하는 이름
+
+`one_of(c("a", "b", "c"))`: 변수명이 a, b, c 중 하나
+
+`num_range("x", 1:3)`: x1, x2, x3
+]
+
+
+---
+
+# 실습 4
+
+.large[
+**남자** 만 골라, **Sex:HTN** 사이의 변수들만 뽑고, 나이로 정렬하라. 
+]
+
+--
+
+```{r, eval=F}
+a %>% filter(Sex == "M") %>% select(Sex:HTN) %>% arrange(Age)
+```
+
+```{r, echo=F}
+a %>% filter(Sex == "M") %>% select(Sex:HTN) %>% arrange(Age) %>% paged_table
+```
+
+
+---
+
+# 실습 4: 기본 R 스타일
+
+```{r, eval=F}
+a %>% subset(Sex == "M") %>% .[, c("Sex", "Age", "Height", "Weight", "BMI", "DM", "HTN")] %>% .[order(.$Age), ]
+a %>% subset(Sex == "M") %>% .[, 2:8] %>% .[order(.$Age), ]
+```
+
+```{r, echo=F}
+a %>% filter(Sex == "M") %>% select(Sex:HTN) %>% arrange(Age) %>% paged_table
+```
+
+
+---
+
+# `mutate`: 변수 생성
+
+.large[
+**Old**, **Overweight** 변수 만들기
+]
+
+
+```{r, eval=F}
+a$old <- as.integer(a$Age >= 65) 
+a$overweight <- as.integer(a$BMI >= 27)
+*a %>% mutate(Old = as.integer(Age >= 65), Overweight = as.integer(BMI >= 27))
+```
+
+```{r, echo=T}
+a %>% mutate(Old = as.integer(Age >= 65), Overweight = as.integer(BMI >= 27)) %>% paged_table
+```
+
+---
+
+# `transmute`: 만든 변수만 보여주기
+
+```{r, eval=F}
+a %>% transmute(Old = as.integer(Age >= 65),
+             Overweight = as.integer(BMI >= 27)
+             )
+```
+
+```{r, eval=F}
+a %>% transmute(Old = as.integer(Age >= 65),
+             Overweight = as.integer(BMI >= 27)
+             ) %>% paged_table
+```
+
+
+---
+
+# `group_by` & `summarize`
+
+.large[
+**그룹**으로 나누고, **요약통계량**을 구한다
+]
+
+
+```{r, eval=F}
+a %>% 
+*  group_by(Sex, Smoking) %>% 
+*  summarize(count = n(),              ## n()는 샘플수 
+*            meanBMI = mean(BMI),
+*            sdBMI = sd(BMI))
+```
+
+```{r, echo=F}
+a %>% 
+  group_by(Sex, Smoking) %>% 
+  summarize(count = n(),              ## n()는 샘플수 
+            meanBMI = mean(BMI),
+            sdBMI = sd(BMI)) %>% paged_table
+```
+
+---
+
+# `summarize_all` 모든 변수에 적용
+
+```{r, eval=F}
+a %>% 
+  filter(Age >= 50) %>% 
+  group_by(Sex, Smoking) %>% 
+* summarize_all(mean)
+```
+
+```{r, echo=F}
+a %>% 
+  filter(Age >= 50) %>% 
+  group_by(Sex, Smoking) %>% 
+  summarize_all(mean) %>% paged_table
+```
+
+
+범주형 변수의 평균은 `NA` 로 나온다.
+
+---
+
+# `summarize_all` with 여러 함수
+
+```{r, eval=F}
+a %>% 
+  filter(Age >= 50) %>% 
+  select(-Patient_ID, -STRESS_EXIST) %>%       ## Except categorical variable
+  group_by(Sex, Smoking) %>% 
+* summarize_all(funs(mean = mean, sd = sd))
+```
+
+```{r, echo=F}
+a %>% 
+  filter(Age >= 50) %>% 
+  select(-Patient_ID, -STRESS_EXIST) %>%       ## Except categorical variable
+  group_by(Sex, Smoking) %>% 
+  summarize_all(funs(mean = mean, sd = sd)) %>% paged_table
+```
+
+
+---
+
+# 실습 5: 실습 3과 비교
+
+.large[
+**50세 이상**만 뽑아서, **성별과 흡연력** 에 따른 **모든 변수**들의 **평균, 표준편차**를 구하라. 
+]
+
+--
+
+```{r, eval=F}
+a %>% 
+  subset(Age >= 50) %>%
+  aggregate(. ~ Sex + Smoking, data = ., 
+            FUN = function(x){c(mean = mean(x), sd = sd(x))})
+```
+
+--
+
+```{r, eval=F}
+a %>% 
+  filter(Age >= 50) %>% 
+  select(-Patient_ID, -STRESS_EXIST) %>%       ## Except categorical variable
+  group_by(Sex, Smoking) %>% 
+  summarize_all(funs(mean = mean, sd = sd))
+```
+
+
+---
+
+<embed src="https://drive.google.com/viewerng/
+viewer?embedded=true&url=https://github.com/rstudio/cheatsheets/raw/master/data-transformation.pdf" width="100%" height="600">
 
 
 
