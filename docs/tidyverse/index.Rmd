@@ -23,8 +23,8 @@ subtitle: "서울대병원 진단검사의학과"
 
 ```{r setup, include=FALSE}
 options(htmltools.dir.version = FALSE)
-knitr::opts_chunk$set(echo = FALSE, fig.align = "center")
-library(knitr);library(DT);library(shiny)
+knitr::opts_chunk$set(echo = T, fig.align = "center")
+library(knitr);library(DT);library(rmarkdown)
 ```
 
 
@@ -43,9 +43,6 @@ layout: true
 .large[
 
 [tidyverse](https://www.tidyverse.org/)는 직관적인 코드를 장점으로 원래의 R 문법을 빠르게 대체하고 있다.
-
-
-* [readr](https://readr.tidyverse.org/) 패키지의 `read_csv` 로 데이터를 빠르게 읽은 후
 
 
 * [magrittr](https://magrittr.tidyverse.org/) 패키지의 `%>%` 연산자로 의식의 흐름대로 코딩한다.
@@ -67,15 +64,204 @@ class: center, middle
 
 class: center, middle
 
-# [readr](https://readr.tidyverse.org/): `read_csv`
+# [magrittr](https://magrittr.tidyverse.org/): `%>%`
 
 
 ---
 
-class: center, middle
+# 하나만 기억해야 한다면 `%>%`
 
-# [magrittr](https://magrittr.tidyverse.org/): `%>%`
+.large[
 
+- 단축키 Ctrl + Shift + M (**OS X**: Cmd + Shift + M)
+
+- 의식 흐름대로 코딩 가능.
+]
+
+```{r, eval=F}
+a <- read.csv("https://raw.githubusercontent.com/jinseob2kim/jinseob2kim.github.io/master/smc_example.csv")
+a %>% head
+```
+
+```{r, echo=F}
+a <- read.csv("https://raw.githubusercontent.com/jinseob2kim/jinseob2kim.github.io/master/smc_example.csv")
+a %>% head %>% paged_table
+```
+
+
+---
+
+# `a`의 `head`를 보여줘 
+
+.large[
+
+- `head(a)` 와 `a %>% head` 는 동일한 코드.
+
+- 후자가 생각의 흐름을 그대로 반영.
+
+]
+
+
+```{r, eval=F}
+head(a)
+a %>% head                ## 동일
+a %>% head()              ## 동일
+```
+
+---
+
+# `%>%`: 함수 입력값을 앞으로 빼옴.
+
+.large[
+
+첫 입력값은 그냥 빼오면 됨
+- `f(x, y)` = `x %>% f(y)`
+
+첫 입력값 아니라면 `.` 으로 흔적 남겨야
+
+]
+
+```{r, eval=F}
+a %>% head(n = 10)
+10 %>% head(a, .)   
+10 %>% head(a, n = .)
+```
+
+
+---
+
+# 실습 1: `%>%` 써보기
+
+.large[
+
+데이터셋 `a` 에서 **남자만** 뽑고, 1주차 방법과 비교하기.
+
+]
+
+--
+
+```{r, eval=F}
+subset(a, Sex == "M")
+*a %>% subset(Sex == "M")
+```
+
+```{r, eval=T, echo=F}
+a %>% subset(Sex == "M") %>% paged_table
+```
+
+---
+
+# 실습 2: 변수 선택
+
+.large[
+**Sex** 변수만 고르기
+]
+
+--
+
+```{r, eval=F}
+## original 
+a$Sex                  ## data.frame style
+a[, "Sex"]             ## matrix style
+a[["Sex"]]             ## list style
+
+## tidyverse style
+a %>% .$Sex
+a %>% .[, "Sex"]
+a %>% .[["Sex"]]
+```
+
+---
+
+# 여러 함수 같이 쓸 때
+
+.large[
+ `a`에서 **남자만** 뽑아서 **`head`**를 보여줘
+]
+
+```{r, eval=F}
+head(subset(a, Sex == "M"))
+*a %>% subset(Sex == "M") %>% head
+```
+
+```{r, eval=T, echo=F}
+a %>% subset(Sex == "M") %>% head %>% paged_table
+```
+
+
+---
+
+# 예: 회귀분석
+
+.large[
+**남자만** 뽑아 **회귀분석**을 수행하고 그 **계수와 p-value** 보여주기
+]
+
+```{r, eval = F}
+b <- subset(a, Sex == "M")
+model <- glm(DM ~ Age + Weight + BMI, data = b, family = binomial)
+summ.model <- summary(model)
+summ.model$coefficients
+```
+
+```{r, echo = F}
+b <- subset(a, Sex == "M")
+model <- glm(DM ~ Age + Weight + BMI, data = b, family = binomial)
+summ.model <- summary(model)
+summ.model$coefficients %>% round(3) %>%  as.data.frame %>% paged_table
+```
+
+--
+
+중간 결과물인 **b, model, summ.model** 필요
+
+
+---
+
+# 회귀분석 with `%>%`
+
+```{r, eval=F}
+a %>% 
+  subset(Sex == "M") %>% 
+  glm(DM ~ Age + Weight + BMI, data = ., family = binomial) %>% 
+  summary %>% 
+  .$coefficients
+```
+
+```{r, echo=F}
+a %>% 
+  subset(Sex == "M") %>% 
+  glm(DM ~ Age + Weight + BMI, data = ., family = binomial) %>% 
+  summary %>% 
+  .$coefficients %>% round(3) %>%  as.data.frame %>% paged_table
+```
+
+읽기 쉬움, 중간결과물 필요없음
+
+
+---
+
+# 각 줄은 꼭 `%>%` 로 끝나야 한다
+
+```{r, eval = F}
+a %>% subset(Sex == "M")
+  %>% head
+```
+
+**(X)**
+
+--
+
+```{r, eval = F}
+a %>% subset(Sex == "M") %>% 
+  head
+```
+
+**(O)**
+
+.large[
+오늘 강의에서 **`%>%` 만 익숙해지면 성공**
+]
 
 ---
 
@@ -93,9 +279,6 @@ class: center, middle
 .large[
 
 [tidyverse](https://www.tidyverse.org/)는 직관적인 코드를 장점으로 원래의 R 문법을 빠르게 대체하고 있다.
-
-
-* [readr](https://readr.tidyverse.org/) 패키지의 `read_csv` 로 데이터를 빠르게 읽은 후
 
 
 * [magrittr](https://magrittr.tidyverse.org/) 패키지의 `%>%` 연산자로 의식의 흐름대로 코딩한다.
