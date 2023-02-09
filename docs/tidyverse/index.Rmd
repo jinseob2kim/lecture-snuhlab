@@ -2,7 +2,6 @@
 title: "R 데이터 매니지먼트: tidyverse"
 author: 김진섭; [`r anicon::faa('github', animate='float', rtext='jinseob2kim')`](https://github.com/jinseob2kim)
 institute: "차라투(주)"
-date: "2020-04-14"
 output:
   xaringan::moon_reader:
     css: ["css/footer-header.css", "default"]
@@ -18,7 +17,6 @@ output:
       highlightLines: true
       countIncrementalSlides: false
       ratio: "4:3" 
-subtitle: "서울대병원 진단검사의학과"
 ---
 
 ```{r setup, include=FALSE}
@@ -107,13 +105,13 @@ class: center, middle
 ]
 
 ```{r, eval=F}
-a <- read.csv("https://raw.githubusercontent.com/jinseob2kim/jinseob2kim.github.io/master/smc_example.csv")
+a <- read.csv("https://raw.githubusercontent.com/jinseob2kim/R-skku-biohrs/main/data/smc_example1.csv")
 library(magrittr)
 a %>% head
 ```
 
 ```{r, echo=F}
-a <- read.csv("https://raw.githubusercontent.com/jinseob2kim/jinseob2kim.github.io/master/smc_example.csv")
+a <- read.csv("https://raw.githubusercontent.com/jinseob2kim/R-skku-biohrs/main/data/smc_example1.csv")
 a %>% head %>% paged_table
 ```
 
@@ -368,7 +366,7 @@ class: center, middle
 library(dplyr)                                  ## 따로 magrittr 불러올 필요 없음.
 a %>% 
 *  filter(Age >= 50) %>%
-*  select(-Patient_ID, -STRESS_EXIST) %>%       ## 범주형 변수 제외
+*  select(-STRESS_EXIST) %>%       ## 범주형 변수 제외
 *  group_by(Sex, Smoking) %>% 
 *  summarize_all(list(mean = mean, sd = sd))
 ```
@@ -377,7 +375,7 @@ a %>%
 library(dplyr)                                  ## 따로 magrittr 불러올 필요 없음.
 a %>% 
   filter(Age >= 50) %>%
-  select(-Patient_ID, -STRESS_EXIST) %>%       ## 범주형 변수 제외
+  select(-STRESS_EXIST) %>%       ## 범주형 변수 제외
   group_by(Sex, Smoking) %>% 
   summarize_all(list(mean = mean, sd = sd)) %>% paged_table()
 ```
@@ -675,7 +673,7 @@ a %>%
 ```{r, eval=F}
 a %>% 
   filter(Age >= 50) %>% 
-  select(-Patient_ID, -STRESS_EXIST) %>%       ## Except categorical variable
+  select(-STRESS_EXIST) %>%       ## Except categorical variable
   group_by(Sex, Smoking) %>% 
 * summarize_all(funs(mean = mean, sd = sd))
 ```
@@ -683,7 +681,7 @@ a %>%
 ```{r, echo=F}
 a %>% 
   filter(Age >= 50) %>% 
-  select(-Patient_ID, -STRESS_EXIST) %>%       ## Except categorical variable
+  select(-STRESS_EXIST) %>%       ## Except categorical variable
   group_by(Sex, Smoking) %>% 
   summarize_all(funs(mean = mean, sd = sd)) %>% paged_table
 ```
